@@ -14,10 +14,10 @@ class UpdateProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'fullname' => 'string',
-            'phone' => 'numeric|digits_between:11,14',
-            'date_of_birth' => 'date',
-            'gender' => 'string|in:male,female',
+            'fullname' => 'nullable|string',
+            'phone' => 'nullable|numeric|digits_between:11,14',
+            'date_of_birth' => 'nullable|date',
+            'gender' => 'nullable|string|in:male,female',
         ];
     }
 

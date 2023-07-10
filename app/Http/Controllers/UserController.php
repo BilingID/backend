@@ -54,7 +54,7 @@ class UserController extends Controller
 
         foreach (array_keys($request->rules()) as $field)
         {
-            if (array_key_exists($field, $data))
+            if (array_key_exists($field, $data) && $data[$field] && $data[$field] !== $user[$field])
                 $user[$field] = $data[$field];
         }
         
