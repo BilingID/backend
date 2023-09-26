@@ -18,7 +18,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@biling.id',
             'date_of_birth' => '1999-01-01',
             'email_verified_at' => now(),
-            'password' => bcrypt('admin'),
+            'password' => bcrypt('admin123'),
             'phone' => '089512341234',
             'gender' => 'male',
             'role' => 'admin',

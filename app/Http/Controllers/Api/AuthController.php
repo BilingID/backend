@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,8 @@ class AuthController extends Controller
             'fullname' => $request->fullname,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'role' => config('user.roles.klien')
+            // 'role' => config('user.roles.klien')
+            'role' => "klien"
         ]);
 
         if ($registeredUser)

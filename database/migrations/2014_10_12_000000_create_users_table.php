@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 100);
             $table->enum('role', array('admin', 'klien', 'psikolog')); // should 0, 1, or 2 ?
+            $table->string('profile_photo', 100)->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -56,10 +57,14 @@ class UserController extends Controller
         {
             if (array_key_exists($field, $data) && $data[$field] && $data[$field] !== $user[$field])
                 $user[$field] = $data[$field];
+                
         }
-        
-        $user->updated_at = now();
 
+        $user->updated_at = now();
+        
+        if ($request->profile_photo !== null)
+            $user->profile_photo = '/storage/' . $request->profile_photo->store('images/profiles', 'public');
+    
         if (!$user->save())
             return $this->error([], AuthConstants::UPDATED_FAILED);
 
