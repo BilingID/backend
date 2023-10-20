@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\IndexController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,19 +17,14 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-Route::get('/', function (){
-    return response([
-        'api' => env('APP_NAME', 'app'),
-        'version' => env('APP_VERSION', '1.0.0'),
-    ], 200);
-});
+Route::get('/', [IndexController::class, 'index']);
+Route::post('/{id}', [IndexController::class, 'show']);
 
-
-Route::prefix('v1/users')->group(function() {
-// Route::prefix('users')->group(function() {
+Route::prefix('v1/users')->group(function () {
+    // Route::prefix('users')->group(function() {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function() {
+    Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::put('/', [UserController::class, 'show']);
         Route::post('/logout', [AuthController::class, 'logout']);

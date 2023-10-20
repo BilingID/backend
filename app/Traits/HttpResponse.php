@@ -7,7 +7,7 @@ use App\Constants\HttpResponseCode as ResponseCode;
 
 trait HttpResponse
 {
-    public function success($data, $message = null, $code = ResponseCode::HTTP_OK): JsonResponse
+    public function success($data, string $message = null, int $code = ResponseCode::HTTP_OK): JsonResponse
     {
         return response()->json([
             'status' => 'success',
@@ -16,7 +16,7 @@ trait HttpResponse
         ], $code);
     }
 
-    public function error($data, $message = null, $code = ResponseCode::HTTP_BAD_REQUEST): JsonResponse
+    public function error($data, string $message = null, int $code = ResponseCode::HTTP_BAD_REQUEST): JsonResponse
     {
         return response()->json([
             'status' => 'error',
@@ -25,5 +25,3 @@ trait HttpResponse
         ], $code);
     }
 }
-
-?>
