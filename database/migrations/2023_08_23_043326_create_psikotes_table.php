@@ -12,7 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('psikotes', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('psikotes_code')->primary();
+            $table->dateTime('attempt_date');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('answer_id');
+            $table->unsignedBigInteger('invoice_id');
+            $table->unsignedBigInteger('result_id');
             $table->timestamps();
         });
     }
