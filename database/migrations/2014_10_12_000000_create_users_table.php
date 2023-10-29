@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('fullname');
             $table->enum('gender', array('male', 'female'));
             $table->string('profile_photo')->nullable();
-            $table->enum('role', array('admin', 'klien', 'psikolog'));
+            $table->enum('role', array('admin', 'client', 'psychologist'));
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

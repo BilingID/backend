@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Psikotes>
  */
-class PsikotesFactory extends Factory
+class PsychotestFactory extends Factory
 {
     /**
      * Define the model's default state.

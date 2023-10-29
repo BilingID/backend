@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\UpdateProfileRequest;
 use Illuminate\Validation\Rule;
-use App\Constants\HttpResponseCode as ResponseCode; 
+use App\Constants\HttpResponseCode as ResponseCode;
 
 
 class UserController extends Controller
@@ -19,12 +19,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (Auth::user()->role === config('user.roles.admin'))
-        {
-            $users = User::whereIn('role', ['psikolog', 'klien'])->get();
+        if (Auth::user()->role === config('user.roles.admin')) {
+            $users = User::whereIn('role', ['psychologist', 'client'])->get();
             return $this->success(['users' => $users]);
         }
-        
+
         return $this->error([], "Unauthorized.");
     }
 
@@ -33,7 +32,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-         //
+        //
     }
 
     /**
@@ -48,21 +47,20 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     public function update(UpdateProfileRequest $request)
-    {   
+    {
         $user = Auth::user();
         $data = $request->all();
 
-        foreach (array_keys($request->rules()) as $field)
-        {
+        foreach (array_keys($request->rules()) as $field) {
             if (array_key_exists($field, $data) && $data[$field] && $data[$field] !== $user[$field])
                 $user[$field] = $data[$field];
         }
 
         $user->updated_at = now();
-        
+
         if ($request->profile_photo !== null)
             $user->profile_photo = '/storage/' . $request->profile_photo->store('images/profiles', 'public');
-    
+
         if (!$user->save())
             return $this->error([], "User profile update failed.");
 

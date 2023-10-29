@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Jadwal;
+use App\Models\Psychotest;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class JadwalPolicy
+class PsychotestPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class JadwalPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Jadwal $jadwal): bool
+    public function view(User $user, Psychotest $psychotest): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class JadwalPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Jadwal $jadwal): bool
+    public function update(User $user, Psychotest $psychotest): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class JadwalPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Jadwal $jadwal): bool
+    public function delete(User $user, Psychotest $psychotest): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class JadwalPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Jadwal $jadwal): bool
+    public function restore(User $user, Psychotest $psychotest): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class JadwalPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Jadwal $jadwal): bool
+    public function forceDelete(User $user, Psychotest $psychotest): bool
     {
         //
     }

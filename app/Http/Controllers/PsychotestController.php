@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreKonselingRequest;
-use App\Http\Requests\UpdateKonselingRequest;
-use App\Models\Konseling;
+use App\Http\Requests\StorePsychotestRequest;
+use App\Http\Requests\UpdatePsychotestRequest;
+use App\Models\Psychotest;
 
-class KonselingController extends Controller
+class PsychotestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class KonselingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreKonselingRequest $request)
+    public function store(StorePsychotestRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class KonselingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Konseling $konseling)
+    public function show(Psychotest $psychotest)
     {
         //
     }
@@ -43,7 +43,7 @@ class KonselingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Konseling $konseling)
+    public function edit(Psychotest $psychotest)
     {
         //
     }
@@ -51,7 +51,7 @@ class KonselingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateKonselingRequest $request, Konseling $konseling)
+    public function update(UpdatePsychotestRequest $request, Psychotest $psychotest)
     {
         //
     }
@@ -59,7 +59,7 @@ class KonselingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Konseling $konseling)
+    public function destroy(Psychotest $psychotest)
     {
         //
     }
