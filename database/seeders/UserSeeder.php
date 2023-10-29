@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      * Run the database seeds.
      */
     public function run(): void
-    {   
+    {
         $admin = [
             'fullname' => 'admin',
             'email' => 'admin@biling.id',
@@ -33,11 +33,9 @@ class UserSeeder extends Seeder
             'password' => bcrypt('nizam123'),
             'phone' => '089544445555',
             'gender' => 'male',
-            'role' => 'klien',
+            'role' => 'client',
             'created_at' => now(),
         ];
         User::insert($klien);
     }
-
-
 }

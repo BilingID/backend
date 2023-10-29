@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePsikotesRequest;
-use App\Http\Requests\UpdatePsikotesRequest;
-use App\Models\Psikotes;
+use App\Http\Requests\StoreScheduleRequest;
+use App\Http\Requests\UpdateScheduleRequest;
+use App\Models\Schedule;
 
-class PsikotesController extends Controller
+class ScheduleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class PsikotesController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePsikotesRequest $request)
+    public function store(StoreScheduleRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class PsikotesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Psikotes $psikotes)
+    public function show(Schedule $schedule)
     {
         //
     }
@@ -43,7 +43,7 @@ class PsikotesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Psikotes $psikotes)
+    public function edit(Schedule $schedule)
     {
         //
     }
@@ -51,7 +51,7 @@ class PsikotesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePsikotesRequest $request, Psikotes $psikotes)
+    public function update(UpdateScheduleRequest $request, Schedule $schedule)
     {
         //
     }
@@ -59,7 +59,7 @@ class PsikotesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Psikotes $psikotes)
+    public function destroy(Schedule $schedule)
     {
         //
     }

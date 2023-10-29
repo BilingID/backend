@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Psikotes;
+use App\Models\Schedule;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class PsikotesPolicy
+class SchedulePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class PsikotesPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Psikotes $psikotes): bool
+    public function view(User $user, Schedule $schedule): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class PsikotesPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Psikotes $psikotes): bool
+    public function update(User $user, Schedule $schedule): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class PsikotesPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Psikotes $psikotes): bool
+    public function delete(User $user, Schedule $schedule): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class PsikotesPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Psikotes $psikotes): bool
+    public function restore(User $user, Schedule $schedule): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class PsikotesPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Psikotes $psikotes): bool
+    public function forceDelete(User $user, Schedule $schedule): bool
     {
         //
     }

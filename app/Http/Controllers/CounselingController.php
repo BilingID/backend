@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreJadwalRequest;
-use App\Http\Requests\UpdateJadwalRequest;
-use App\Models\Jadwal;
+use App\Http\Requests\StoreCounselingRequest;
+use App\Http\Requests\UpdateCounselingRequest;
+use App\Models\Counseling;
 
-class JadwalController extends Controller
+class CounselingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class JadwalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreJadwalRequest $request)
+    public function store(StoreCounselingRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class JadwalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Jadwal $jadwal)
+    public function show(Counseling $counseling)
     {
         //
     }
@@ -43,7 +43,7 @@ class JadwalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Jadwal $jadwal)
+    public function edit(Counseling $counseling)
     {
         //
     }
@@ -51,7 +51,7 @@ class JadwalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateJadwalRequest $request, Jadwal $jadwal)
+    public function update(UpdateCounselingRequest $request, Counseling $counseling)
     {
         //
     }
@@ -59,7 +59,7 @@ class JadwalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jadwal $jadwal)
+    public function destroy(Counseling $counseling)
     {
         //
     }
