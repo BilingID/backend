@@ -25,11 +25,11 @@ Route::prefix('v1/users')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('/', [UserController::class, 'index']);
-        Route::put('/', [UserController::class, 'show']);
+        // Route::get('/', [UserController::class, 'index']);
+        Route::get('/', [UserController::class, 'show']);
+        Route::put('/', [UserController::class, 'update']);
+        Route::put('/email', [AuthController::class, 'updateEmail']);
+        Route::put('/password', [AuthController::class, 'updatePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
-        Route::post('/update', [UserController::class, 'update']);
-        Route::post('/email', [AuthController::class, 'updateEmail']);
-        Route::post('/password', [AuthController::class, 'updatePassword']);
     });
 });
