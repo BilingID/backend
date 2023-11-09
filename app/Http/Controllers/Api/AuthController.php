@@ -12,6 +12,8 @@ use App\Http\Requests\ResetEmailRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Constants\HttpResponseCode as ResponseCode;
+// use Google_Client;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -35,6 +37,7 @@ class AuthController extends Controller
 
     }
 
+
     public function login(AuthRequest $request)
     {
         if (Auth::attempt($request->all())) {
@@ -46,6 +49,30 @@ class AuthController extends Controller
         }
 
         return $this->error([], "Your email or password is incorrect.", ResponseCode::HTTP_UNAUTHORIZED);
+    }
+
+    public function loginWithGoogle(Request $request)
+    {
+        $googleAccessToken = $request->access_token;
+        
+        $response = Http::get('https://www.googleapis.com/oauth2/v1/userinfo', [
+            'access_token' => $googleAccessToken,
+        ]);
+
+        if ($response->failed())
+            return $this->error([], "Unable to login with Google.");
+        
+        $googleEmail = $response->json("email");
+
+        $user = User::where('email', $googleEmail)->first();
+
+        if (!$user)
+            return $this->error([], "Your email is not registered.", ResponseCode::HTTP_UNAUTHORIZED);
+
+        $user->tokens()->delete();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return $this->success(['token' => $token], "User login successfully.");
     }
 
     public function logout()

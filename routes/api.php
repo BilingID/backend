@@ -20,10 +20,14 @@ use App\Http\Controllers\Api\IndexController;
 Route::get('/', [IndexController::class, 'index']);
 Route::post('/{id}', [IndexController::class, 'show']);
 
+Route::prefix('v1/auth')->group(function () {
+    Route::post('/google', [AuthController::class, 'loginWithGoogle']);
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::post('/register', [AuthController::class, 'register']);
+});
+
 Route::prefix('v1/users')->group(function () {
     // Route::prefix('users')->group(function() {
-    Route::post('/register', [AuthController::class, 'register']);
-    Route::post('/login', [AuthController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function () {
         // Route::get('/', [UserController::class, 'index']);
         Route::get('/', [UserController::class, 'show']);
