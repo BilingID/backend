@@ -40,7 +40,13 @@ class UserController extends Controller
      */
     public function show()
     {
-        return $this->success(['user' => Auth::user()]);
+        $user = Auth::user();
+        if (!empty($user->password)) {
+            $user->isPasswordSet = 1;
+        } else {
+            $user->isPasswordSet = 0;
+        }
+        return $this->success(['user' => $user]);
     }
 
     /**

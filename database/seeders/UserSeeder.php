@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
 
         $klien = [
             'fullname' => 'Nizam Abdullah',
-            'email' => 'abd@biling.id',
+            'email' => 'edfallennzm@gmail.com',
             'date_of_birth' => '2002-11-20',
             'password' => bcrypt('nizam123'),
             'phone' => '089544445555',

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('email')->unique();
             $table->string('phone', 20)->nullable();
-            $table->string('password');
+            $table->string('password')->nullable(); // for google register
             $table->string('fullname');
             $table->enum('gender', array('male', 'female'));
             $table->string('profile_photo')->nullable();

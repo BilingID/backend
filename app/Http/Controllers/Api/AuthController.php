@@ -37,6 +37,34 @@ class AuthController extends Controller
 
     }
 
+    public function registerWithGoogle(Request $request)
+    {
+        $googleAccessToken = $request->access_token;
+        
+        $response = Http::get('https://www.googleapis.com/oauth2/v1/userinfo', [
+            'access_token' => $googleAccessToken,
+        ]);
+
+        if ($response->failed())
+            return $this->error([], "Unable to login with Google.");
+        
+        $googleEmail = $response->json("email");
+
+        $user = User::where('email', $googleEmail)->first();
+        if ($user)
+            return $this->error([], "This email is already registered.", ResponseCode::HTTP_UNAUTHORIZED);
+
+        $registeredUser = User::create([
+            'fullname' => $response->json("name"),
+            'email' => $googleEmail,
+            'profile_photo' => $response->json("picture"),
+            'role' => "klien"
+        ]);
+
+        $token = $registeredUser->createToken('auth_token')->plainTextToken;
+        return $this->success(['token' => $token], "User registered successfully.");
+    }
+
 
     public function login(AuthRequest $request)
     {

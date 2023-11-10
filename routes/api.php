@@ -22,6 +22,7 @@ Route::post('/{id}', [IndexController::class, 'show']);
 
 Route::prefix('v1/auth')->group(function () {
     Route::post('/google', [AuthController::class, 'loginWithGoogle']);
+    Route::post('/google/register', [AuthController::class, 'registerWithGoogle']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/register', [AuthController::class, 'register']);
 });
