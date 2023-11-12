@@ -49,12 +49,10 @@ class UserController extends Controller
         return $this->success(['user' => $user]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateProfileRequest $request)
     {
         $user = Auth::user();
+        
         $data = $request->all();
 
         foreach (array_keys($request->rules()) as $field) {
@@ -65,13 +63,14 @@ class UserController extends Controller
         $user->updated_at = now();
 
         if ($request->profile_photo !== null)
-            $user->profile_photo = '/storage/' . $request->profile_photo->store('images/profiles', 'public');
+            $user->profile_photo = config("app.url") . 'storage/' . $request->profile_photo->store('img/profiles', 'public');
 
         if (!$user->save())
             return $this->error([], "User profile update failed.");
 
-        return $this->success([], "User profile updated successfully.");
+        return $this->success($user, "User profile updated successfully.");
     }
+ 
 
     /**
      * Remove the specified resource from storage.

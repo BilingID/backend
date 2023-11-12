@@ -32,7 +32,7 @@ Route::prefix('v1/users')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         // Route::get('/', [UserController::class, 'index']);
         Route::get('/', [UserController::class, 'show']);
-        Route::put('/', [UserController::class, 'update']);
+        Route::post('/', [UserController::class, 'update']);
         Route::put('/email', [AuthController::class, 'updateEmail']);
         Route::put('/password', [AuthController::class, 'updatePassword']);
         Route::post('/logout', [AuthController::class, 'logout']);
