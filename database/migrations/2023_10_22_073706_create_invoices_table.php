@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->enum('status', array('pending', 'paid', 'expired'));
+            $table->enum('status', array('pending', 'paid', 'expired'))->default('pending');
             $table->unsignedBigInteger('amount');
             $table->datetime('payment_date')->nullable();
             $table->string('qr_code')->nullable();
@@ -26,6 +26,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('invoices');
+        Schema::enableForeignKeyConstraints();
     }
 };

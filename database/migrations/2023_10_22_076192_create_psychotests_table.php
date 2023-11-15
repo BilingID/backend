@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('psychotest', function (Blueprint $table) {
+        Schema::create('psychotests', function (Blueprint $table) {
             $table->timestamps();
             $table->uuid('code')->primary();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('invoice_id')->constrained('invoices');
-            $table->foreignId('answer_id')->constrained('answers')->nullable();
-            $table->foreignId('result_id')->constrained('results')->nullable();
+            $table->foreignId('answer_id')->nullable()->constrained('answers');
+            $table->foreignId('result_id')->nullable()->constrained('results');
             $table->datetime('attempt_date')->nullable();
         });
     }
@@ -27,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('psychotest');
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('psychotests');
+        Schema::enableForeignKeyConstraints();
     }
 };

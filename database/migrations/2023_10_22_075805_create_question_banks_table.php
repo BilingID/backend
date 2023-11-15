@@ -23,6 +23,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('question_banks');
+        Schema::enableForeignKeyConstraints();
+
     }
 };

@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+
 return new class extends Migration
 {
     /**
@@ -20,7 +21,7 @@ return new class extends Migration
             $table->string('fullname');
             $table->enum('gender', array('male', 'female'));
             $table->string('profile_photo')->nullable();
-            $table->enum('role', array('admin', 'client', 'psychologist'));
+            $table->enum('role', array('admin', 'client', 'psychologist'))->default('client');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -32,6 +33,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('users');
+        Schema::enableForeignKeyConstraints();
     }
 };
