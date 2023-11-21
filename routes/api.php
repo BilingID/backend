@@ -30,18 +30,26 @@ Route::prefix('v1')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
     });
 
+    Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
+    });
+
     Route::prefix('users')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [UserController::class, 'show']);
         Route::post('/', [UserController::class, 'update']);
         Route::put('/password', [AuthController::class, 'updatePassword']);
-        Route::post('/logout', [AuthController::class, 'logout']);
         // Route::get('/', [UserController::class, 'index']);
         // Route::put('/email', [AuthController::class, 'updateEmail']); // remove unused feature
     }); 
     
     Route::prefix('psikotes')->middleware('auth:sanctum')->group(function () { 
+        Route::get('/', [PsychotestController::class, 'index']);
         Route::post('/', [PsychotestController::class, 'store']);
         Route::get('/{code}', [PsychotestController::class, 'getPayment']);
+        Route::get('/{code}/questions', [PsychotestController::class, 'getQuestions']);
+        Route::post('/{code}/answer', [PsychotestController::class, 'storeAnswer']);
+        Route::get('/{code}/result', [PsychotestController::class, 'getResult']);
+        Route::put('/{code}/result', [PsychotestController::class, 'updateResult']);
     });
 
     Route::prefix('psikotes')->group(function () { 
