@@ -49,7 +49,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/{code}/questions', [PsychotestController::class, 'getQuestions']);
         Route::post('/{code}/answer', [PsychotestController::class, 'storeAnswer']);
         Route::get('/{code}/result', [PsychotestController::class, 'getResult']);
-        Route::put('/{code}/result', [PsychotestController::class, 'updateResult']);
+        Route::post('/{code}/result', [PsychotestController::class, 'updateResult']);
     });
 
     Route::prefix('psikotes')->group(function () { 

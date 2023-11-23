@@ -58,18 +58,20 @@ class PsychotestController extends Controller
 
     public function updateResult(Request $request, string $code)
     {
+        $request->validate([
+            'personality' => 'nullable|string',
+            'attachment' => 'nullable|file|mimes:pdf|max:2048',
+        ]);
+
         $result = Psychotest::with('result')->where('code', $code)->first()->result;
-        
         if (!$result)
             return $this->error([], 'Psychotest not found', 404);
         
-        $result->personality = $request->personality;
-        
-        if ($request->hasFile('attachment')) {
-            $attachment = $request->file('attachment');
-            $attachmentName = Str::random(32) . '.' . $attachment->getClientOriginalExtension();
-            $attachment->move(public_path('storage/attachments'), $attachmentName);
-            $result->attachment_path = $attachmentName;
+        if ($request->personality)
+            $result->personality = $request->personality;
+    
+        if ($request->attachment !== null) {
+            $result->attachment_path = '/storage/' . $request->attachment->store('attachments', 'public');
         }
 
         $result->status = 'ready';
@@ -191,36 +193,5 @@ class PsychotestController extends Controller
             'expired_at' => $expired_at,
         ], 'Psychotest status retrieved successfully');
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Psychotest $psychotest)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Psychotest $psychotest)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePsychotestRequest $request, Psychotest $psychotest)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Psychotest $psychotest)
-    {
-        //
-    }
+ 
 }
