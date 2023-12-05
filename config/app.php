@@ -70,8 +70,8 @@ return [
     |
     */
 
-    // 'timezone' => 'Asia/Jakarta',
-    'timezone' => 'GMT+7',
+    'timezone' => 'Asia/Jakarta',
+    // 'timezone' => 'GMT+7',
 
     /*
     |--------------------------------------------------------------------------

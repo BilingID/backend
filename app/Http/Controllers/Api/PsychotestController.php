@@ -151,14 +151,23 @@ class PsychotestController extends Controller
         if (!$invoice)
             return $this->error([], 'Psychotest not found', 404);
 
-        if ($invoice->status == 'paid')
+        if ($invoice->status === 'expired') 
+            return $this->error([], 'Psychotest payment expired', 400);
+
+        if ($invoice->status === 'paid')
             return $this->error([], 'Psychotest already processed', 400);
         
+        date_default_timezone_set("Asia/Jakarta");
+
         $currentDatetime = date('Y-m-d H:i:s');
         $paymentDatetime = date('Y-m-d H:i:s', strtotime($invoice->created_at . ' + 15 minutes'));
 
-        if ($currentDatetime > $paymentDatetime)
+        if ($currentDatetime > $paymentDatetime) {
+            $invoice->status = 'expired';
+            $invoice->save();
+            
             return $this->error([], 'Psychotest payment expired', 400);
+        }
 
         $invoice->status = 'paid';
         $invoice->save();
@@ -183,14 +192,16 @@ class PsychotestController extends Controller
         if (!$invoice)
             return $this->error([], 'Psychotest not found', 404);
 
-        $expired_at = new Carbon($invoice->created_at, 'Asia/Jakarta');
-        $expired_at->addMinutes(15);
+        date_default_timezone_set("Asia/Jakarta");
+
+        $now = date('Y-m-d H:i:s');
+        $countdown = strtotime($now) - strtotime($invoice->created_at);
         
         return $this->success([
             'status' => $invoice->status,
             'amount' => $invoice->amount,
             'payment_code' => $invoice->qr_code,
-            'expired_at' => $expired_at,
+            'countdown' => $countdown,
         ], 'Psychotest status retrieved successfully');
     }
  
