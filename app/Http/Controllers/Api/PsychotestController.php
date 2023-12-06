@@ -30,7 +30,7 @@ class PsychotestController extends Controller
                         ->join('results', 'psychotests.result_id', '=', 'results.id')
                         ->where('psychotests.user_id', Auth::user()->id)
                         ->where('invoices.status', 'paid')
-                        ->select('psychotests.code', 'invoices.status',  'invoices.qr_code', 'results.status', 'results.attachment_path', 'results.updated_at')
+                        ->select('psychotests.code', 'psychotests.attempt_date', 'invoices.status',  'invoices.qr_code', 'results.status', 'results.attachment_path', 'results.updated_at')
                         ->get();
 
         return $this->success($psychotests, 'Psychotests retrieved successfully');
@@ -86,8 +86,11 @@ class PsychotestController extends Controller
         if (!$psychotest)
             return $this->error([], 'Psychotest not found', 404);
 
+        if ($psychotest->answer_id !== null)
+            return $this->error([], 'Psychotest answers already stored', 400);
+
         $questions = QuestionBank::with('choices')
-            ->limit(50)
+            ->limit(30)
             ->get(['id', 'question_text']);
 
         $transformedQuestions = $questions->map(function ($question) {
@@ -106,9 +109,38 @@ class PsychotestController extends Controller
         return $this->success($transformedQuestions, 'Psychotest questions retrieved successfully');
     }
 
-    public function storeAnswer(Request $request)
+    public function storeAnswer(Request $request, string $code)
     {
-        //
+        $request->validate([
+            'answers' => 'required|array',
+            'answers.*.question_bank_id' => 'required|integer',
+            'answers.*.choice_id' => 'required|integer',
+        ]);
+
+        $answers = $request->answers;
+
+        $psychotest = Psychotest::where('code', $code)->first();
+
+        if (!$psychotest)
+            return $this->error([], 'Psychotest not found', 404);
+
+        if ($psychotest->answer_id !== null)
+            return $this->error([], 'Psychotest answers already stored', 400);
+
+        $answerUuid = Str::uuid();
+        
+        for ($i = 0; $i < count($answers); $i++) {
+            $answers[$i]['group_id'] = $answerUuid;
+        }
+
+        Answer::insert($answers);
+        
+        $psychotest->answer_id = $answerUuid;
+        $psychotest->attempt_date = now('Asia/Jakarta');
+
+        $psychotest->save();
+        
+        return $this->success([], 'Psychotest answers stored successfully');
     }
 
     /**
@@ -123,13 +155,11 @@ class PsychotestController extends Controller
             'amount' => $psychotestAmount,
             'qr_code' => Str::random(32),
         ]);
-        $answer = Answer::create();
         $result = Result::create();
         
         $psychotest = Psychotest::create([
             'user_id' => Auth::user()->id,
             'invoice_id' => $invoice->id,
-            'answer_id' => $answer->id,
             'result_id' => $result->id,
         ]);
         
