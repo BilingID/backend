@@ -9,13 +9,5 @@ class QuestionBank extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'question_text',
-    ];
-
-    public function choices()
-    {
-        return $this->hasMany(Choice::class);
-    }
 
 }

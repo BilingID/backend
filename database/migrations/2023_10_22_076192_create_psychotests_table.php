@@ -15,10 +15,7 @@ return new class extends Migration
             $table->timestamps();
             $table->uuid('code')->primary();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('invoice_id')->constrained('invoices');
-            // $table->foreignId('answer_id')->nullable()->constrained('answers');
-            // foreign uuid
-            $table->foreignUuid('answer_id')->nullable();
+            $table->foreignId('invoice_id')->constrained('invoices'); 
             $table->foreignId('result_id')->nullable()->constrained('results');
             $table->datetime('attempt_date')->nullable();
         });

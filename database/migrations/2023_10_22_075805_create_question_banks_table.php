@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->text('question_text');
+            $table->text('choice_a');
+            $table->text('choice_b');
+            $table->char('type_a');
+            $table->char('type_b');
         });
     }
 
