@@ -33,6 +33,8 @@ class User extends Authenticatable
         'phone',
         'profile_photo',
         'role',
+        'bio_desc',
+        'skill_desc'
     ];
 
     /**

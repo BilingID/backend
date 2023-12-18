@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('phone', 20)->nullable();
             $table->string('password')->nullable(); // for google register
             $table->string('fullname');
+            $table->string('bio_desc')->nullable();
+            $table->string('skill_desc')->nullable();
             $table->enum('gender', array('male', 'female'));
             $table->string('profile_photo')->nullable();
             $table->enum('role', array('admin', 'client', 'psychologist'))->default('client');

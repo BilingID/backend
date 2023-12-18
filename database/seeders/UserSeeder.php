@@ -37,5 +37,26 @@ class UserSeeder extends Seeder
             'created_at' => now(),
         ];
         User::insert($klien);
+
+        $faker = \Faker\Factory::create('id_ID');
+
+        for ($i = 0; $i < 12; $i++) {
+            $psikolog = [
+                'fullname' => $faker->name,
+                'email' => $faker->email,
+                'date_of_birth' => $faker->date($format = 'Y-m-d', $max = 'now'),
+                'password' => bcrypt('psikolog123'),
+                'phone' => $faker->phoneNumber,
+                'gender' => $faker->randomElement(['male', 'female']),
+                'role' => 'psychologist',
+                'created_at' => now(),
+            ];
+
+            User::insert($psikolog);
+    
+        }
+
+        
     }
+
 }

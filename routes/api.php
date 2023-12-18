@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\IndexController;
+use App\Http\Controllers\Api\PsychologController;
 use App\Http\Controllers\Api\PsychotestController;
 use App\Http\Controllers\QR\QrCodeController;
+use App\Mail\SendEmail;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,7 @@ Route::prefix('v1')->group(function () {
         Route::post('/google/register', [AuthController::class, 'registerWithGoogle']);
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
+        Route::post('/forgot-password', [AuthController::class, 'forgottenPassword']);
     });
 
     Route::prefix('auth')->middleware('auth:sanctum')->group(function () {
@@ -40,7 +43,11 @@ Route::prefix('v1')->group(function () {
         Route::put('/password', [AuthController::class, 'updatePassword']);
         // Route::get('/', [UserController::class, 'index']);
         // Route::put('/email', [AuthController::class, 'updateEmail']); // remove unused feature
-    }); 
+        Route::get('/psychologist', [PsychologController::class, 'index']);
+        Route::put('/psychologist/update', [PsychologController::class, 'update']);
+        Route::get('/psychologist/{id}', [PsychologController::class, 'show']);
+    });
+
     
     Route::prefix('psikotes')->middleware('auth:sanctum')->group(function () { 
         Route::get('/', [PsychotestController::class, 'index']);
@@ -59,5 +66,15 @@ Route::prefix('v1')->group(function () {
 
 Route::prefix('test')->group(function () {
     Route::get('/qr/{data}', [QrCodeController::class, 'generate']);
+    Route::get('/sendemail', function () {
+        $data = [
+            'name' => 'Abdullah',
+            'body' => 'Testing Kirim Email di Santri Koding'
+        ];
+       
+        Mail::to('crdua2@gmail.com')->send(new SendEmail($data));
+       
+        dd("Email Berhasil dikirim.");
+    });
 });
  

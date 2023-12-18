@@ -14,6 +14,8 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\GoogleAuthRequest;
 use App\Constants\HttpResponseCode as ResponseCode;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Password;
+
 
 class AuthController extends Controller
 {
@@ -135,4 +137,5 @@ class AuthController extends Controller
 
         return $this->success([], "Email updated successfully");
     }
+ 
 }
