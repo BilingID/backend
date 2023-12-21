@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\PsychologController;
 use App\Http\Controllers\Api\PsychotestController;
 use App\Http\Controllers\QR\QrCodeController;
 use App\Mail\SendEmail;
+use Google\Service\Adsense\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,8 @@ Route::get('/', [IndexController::class, 'index']);
 Route::post('/{id}', [IndexController::class, 'show']);
 
 Route::prefix('v1')->group(function () {
+    Route::get('statistic', [IndexController::class, 'statistic']);
+
     Route::prefix('auth')->group(function () {
         Route::post('/google', [AuthController::class, 'loginWithGoogle']);
         Route::post('/google/register', [AuthController::class, 'registerWithGoogle']);
@@ -40,6 +43,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('users')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [UserController::class, 'show']);
         Route::post('/', [UserController::class, 'update']);
+        Route::get('/', [UserController::class, 'getUsersWithRole']);
         Route::put('/password', [AuthController::class, 'updatePassword']);
         // Route::get('/', [UserController::class, 'index']);
         // Route::put('/email', [AuthController::class, 'updateEmail']); // remove unused feature

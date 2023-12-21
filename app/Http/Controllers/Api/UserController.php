@@ -27,6 +27,23 @@ class UserController extends Controller
         return $this->error([], "Unauthorized.");
     }
 
+    public function getUsersWithRole(Request $request)
+    {
+        $request->validate([
+            'role' => ['required', Rule::in(['psychologist', 'client'])]
+        ]);
+
+        $role = $request->role;
+
+        if (Auth::user()->role === config('user.roles.admin')) {
+            $users = User::where('role', $role)->get();
+            return $this->success(['users' => $users]);
+        }
+
+        return $this->error([], "Unauthorized.");
+    }
+ 
+
     /**
      * Store a newly created resource in storage.
      */
