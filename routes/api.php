@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\IndexController;
 use App\Http\Controllers\Api\PsychologController;
 use App\Http\Controllers\Api\PsychotestController;
+use App\Http\Controllers\Api\CounselingController;
+
 use App\Http\Controllers\QR\QrCodeController;
 use App\Mail\SendEmail;
 use Google\Service\Adsense\Row;
@@ -43,7 +45,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('users')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [UserController::class, 'show']);
         Route::post('/', [UserController::class, 'update']);
-        Route::get('/', [UserController::class, 'getUsersWithRole']);
+        // Route::get('/', [UserController::class, 'getUsersWithRole']);
         Route::put('/password', [AuthController::class, 'updatePassword']);
         // Route::get('/', [UserController::class, 'index']);
         // Route::put('/email', [AuthController::class, 'updateEmail']); // remove unused feature
@@ -52,8 +54,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/psychologist/{id}', [PsychologController::class, 'show']);
     });
 
-    
-    Route::prefix('psikotes')->middleware('auth:sanctum')->group(function () { 
+
+    Route::prefix('psikotes')->middleware('auth:sanctum')->group(function () {
         Route::get('/', [PsychotestController::class, 'index']);
         Route::post('/', [PsychotestController::class, 'store']);
         Route::get('/{code}', [PsychotestController::class, 'getPayment']);
@@ -63,7 +65,14 @@ Route::prefix('v1')->group(function () {
         Route::post('/{code}/result', [PsychotestController::class, 'updateResult']);
     });
 
-    Route::prefix('psikotes')->group(function () { 
+    Route::prefix('konseling')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [CounselingController::class, 'index']);
+        Route::post('/', [CounselingController::class, 'store']);
+        Route::get('/{id}', [CounselingController::class, 'getMeetInfo']);
+        Route::put('/update', [CounselingController::class, 'update']);
+    });
+
+    Route::prefix('psikotes')->group(function () {
         Route::get('/{code}/process', [PsychotestController::class, 'processPayment']); // SIMULATE PAYMENT PROCESS
     });
 });
@@ -75,10 +84,9 @@ Route::prefix('test')->group(function () {
             'name' => 'Abdullah',
             'body' => 'Testing Kirim Email di Santri Koding'
         ];
-       
+
         Mail::to('crdua2@gmail.com')->send(new SendEmail($data));
-       
+
         dd("Email Berhasil dikirim.");
     });
 });
- 
