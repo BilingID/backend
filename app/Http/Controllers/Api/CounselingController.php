@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CounselingController extends Controller
 {
@@ -35,41 +36,87 @@ class CounselingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+    private function generateUniqueID($length = 3)
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyz';
+
+        $randomString = '';
+
+        // Append random letters
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        // Append a hyphen
+        $randomString .= '-';
+
+        // Append random letters
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        // Append a hyphen
+        $randomString .= '-';
+
+        // Append random letters
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $randomString;
+    }
+
+
     public function store(Request $request)
     {
+
+        // Validate the incoming request data
+        $request->validate([
+            // Add validation rules for your request data
+        ]);
+
+        // Check if the user is authenticated
+        if (!Auth::check()) {
+            return $this->error([], 'User not authenticated', 401);
+        }
+
         $counselingAmount = 300000;
-
-        // this should be meet API, temporary solution.
-        $roomID = uniqid();
-
-        // Construct the Google Meet URL
+        $roomID = $this->generateUniqueID();
         $meetURL = "https://meet.google.com/{$roomID}";
 
-
+        // Create an Invoice
         $invoice = Invoice::create([
             'amount' => $counselingAmount,
             'qr_code' => Str::random(32),
         ]);
 
+
+        // Create a Result
         $result = Result::create();
 
-        $createdAt = time();
-
+        // Create Counseling
+        $createdAt = now(); // Use Laravel's now() function to get the current timestamp
         $counseling = Counseling::create([
             'user_id' => Auth::user()->id,
             'invoice_id' => $invoice->id,
             'result_id' => $result->id,
+            'psikolog_id' => $request->psychologist_id,
             'created_at' => $createdAt,
             'meet_url' => $meetURL,
         ]);
 
-        if (!$counseling)
+        if (!$counseling) {
+            // Log the error for troubleshooting
+            Log::error('Failed to create counseling data');
             return $this->error([], 'Failed to create counseling data', 500);
+        }
 
         return $this->success([
             'id' => $counseling->id,
         ], 'Counseling created successfully');
     }
+
 
     /**
      * Display the specified resource.

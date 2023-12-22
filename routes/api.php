@@ -24,9 +24,6 @@ use Google\Service\Adsense\Row;
 |
 */
 
-Route::get('/', [IndexController::class, 'index']);
-Route::post('/{id}', [IndexController::class, 'show']);
-
 Route::prefix('v1')->group(function () {
     Route::get('statistic', [IndexController::class, 'statistic']);
 
