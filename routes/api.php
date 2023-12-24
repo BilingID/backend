@@ -63,10 +63,10 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('konseling')->middleware('auth:sanctum')->group(function () {
-        Route::get('/', [CounselingController::class, 'index']);
+        Route::get('/', [CounselingController::class, 'getMeetInfo']);
         Route::post('/', [CounselingController::class, 'store']);
         Route::get('/{id}', [CounselingController::class, 'getMeetInfo']);
-        Route::put('/update', [CounselingController::class, 'update']);
+        Route::put('/{id}/update', [CounselingController::class, 'update']);
     });
 
     Route::prefix('psikotes')->group(function () {

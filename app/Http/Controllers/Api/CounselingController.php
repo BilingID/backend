@@ -25,7 +25,7 @@ class CounselingController extends Controller
     {
         $counseling = Counseling::where('id', $id)->first();
         $meetURL = $counseling->meet_url;
-        $psychologist = User::where('id', $counseling->psychologist_id)->first();
+        $psychologist = User::where('id', $counseling->psikolog_id)->first();
 
         return $this->success([
             'meet_url' => $meetURL,
@@ -97,6 +97,7 @@ class CounselingController extends Controller
 
         // Create Counseling
         $createdAt = now(); // Use Laravel's now() function to get the current timestamp
+        $updatedAt = now(); // Use Laravel's now() function to get the current timestamp
         $counseling = Counseling::create([
             'user_id' => Auth::user()->id,
             'invoice_id' => $invoice->id,
@@ -104,6 +105,7 @@ class CounselingController extends Controller
             'psikolog_id' => $request->psychologist_id,
             'created_at' => $createdAt,
             'meet_url' => $meetURL,
+            'updated_at' => $updatedAt,
         ]);
 
         if (!$counseling) {
@@ -129,16 +131,86 @@ class CounselingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(String $id)
+
+    public function update(Request $request)
     {
-        //
+        $counseling = Counseling::where('id', $request->id)->first();
+
+        $counseling->updated_at = now();
+        $result = Result::where('id', $counseling->result_id)->first();
+        if ($request->result_file !== null) {
+            $result->attachment_path = config("app.url") . 'storage/' . $request->result_file->store('pdf/result', 'public');
+            $result->updated_at = now();
+            $result->status = 'finish';
+        }
+
+        if (!$result->save())
+            return $this->error([], "Result upload failed.");
+
+        return $this->success($result, "Result uploaded successfully.");
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, String $id)
+    public function processPayment(string $id)
     {
-        //
+        $counseling = Counseling::with('invoice')->with('result')->where('id', $id)->first();
+
+        $invoice = $counseling->invoice;
+        $result = $counseling->result;
+
+        if (!$invoice)
+            return $this->error([], 'Counseling not found', 404);
+
+        if ($invoice->status === 'expired')
+            return $this->error([], 'Counseling payment expired', 400);
+
+        if ($invoice->status === 'paid')
+            return $this->error([], 'Counseling already processed', 400);
+
+        date_default_timezone_set("Asia/Jakarta");
+
+        $currentDatetime = date('Y-m-d H:i:s');
+        $paymentDatetime = date('Y-m-d H:i:s', strtotime($invoice->created_at . ' + 15 minutes'));
+
+        if ($currentDatetime > $paymentDatetime) {
+            $invoice->status = 'expired';
+            $invoice->save();
+
+            return $this->error([], 'Counseling payment expired', 400);
+        }
+
+        $invoice->status = 'paid';
+        $invoice->save();
+
+        $result->status = 'wait';
+        $result->save();
+
+        // event(new PaymentTest($id));
+
+        return $this->success([], 'Counseling payment successfully processed');
+    }
+
+    public function getPayment(string $id)
+    {
+        $session = Auth::user();
+        $invoice = Counseling::with('invoice')
+            ->where('id', $id)
+            ->where('user_id', $session->id)
+            ->first()
+            ->invoice;
+
+        if (!$invoice)
+            return $this->error([], 'Counseling not found', 404);
+
+        date_default_timezone_set("Asia/Jakarta");
+
+        $now = date('Y-m-d H:i:s');
+        $countdown = strtotime($now) - strtotime($invoice->created_at);
+
+        return $this->success([
+            'status' => $invoice->status,
+            'amount' => $invoice->amount,
+            'payment_code' => $invoice->qr_code,
+            'countdown' => $countdown,
+        ], 'Counseling status retrieved successfully');
     }
 }
