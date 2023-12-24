@@ -19,6 +19,10 @@ class CounselingController extends Controller
      */
     public function index()
     {
+        $counselings = Counseling::with('invoice')
+            ->with('result')
+            ->where('user_id', Auth::user()->id)
+            ->get();
     }
 
     public function getMeetInfo(String $id)

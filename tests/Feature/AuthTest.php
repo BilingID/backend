@@ -20,12 +20,12 @@ class AuthTest extends TestCase
     
     public function test_new_user_can_register(): void
     {
-        $response = $this->post('/api/v1/users/register', $this->mockUserData);
+        $response = $this->post('/api/v1/auth/register', $this->mockUserData);
 
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 'success',
-            'message' => 'User registered successfully.',
+            'message' => 'User registered successfully',
         ]);
         // response has data key and token key inside
         $response->assertJsonStructure([
@@ -43,26 +43,26 @@ class AuthTest extends TestCase
 
     public function test_duplicated_user_register(): void
     {
-        $response = $this->post('/api/v1/users/register', $this->mockUserData);
+        $response = $this->post('/api/v1/auth/register', $this->mockUserData);
         $response->assertStatus(200);
         
-        $response = $this->post('/api/v1/users/register', $this->mockUserData);
+        $response = $this->post('/api/v1/auth/register', $this->mockUserData);
         $response->assertStatus(302);
     }
 
     public function test_user_with_valid_credential_can_login(): void
     {
-        $response = $this->post('/api/v1/users/register', $this->mockUserData);
+        $response = $this->post('/api/v1/auth/register', $this->mockUserData);
         $response->assertStatus(200);
         
-        $response = $this->post('/api/v1/users/login', [
+        $response = $this->post('/api/v1/auth/login', [
             'email' => $this->mockUserData['email'],
             'password' => $this->mockUserData['password'],
         ]);
         $response->assertStatus(200);
         $response->assertJson([
             'status' => 'success',
-            'message' => 'User login successfully.',
+            'message' => 'User login successfully',
         ]);
         $response->assertJsonStructure([
             'data' => [
@@ -73,31 +73,31 @@ class AuthTest extends TestCase
     
     public function test_user_with_invalid_credential_couldnt_login(): void
     {
-        $response = $this->post('/api/v1/users/register', $this->mockUserData);
+        $response = $this->post('/api/v1/auth/register', $this->mockUserData);
         $response->assertStatus(200);
         
-        $response = $this->post('/api/v1/users/login', [
+        $response = $this->post('/api/v1/auth/login', [
             'email' => $this->mockUserData['email'],
             'password' => fake()->password,
         ]);
         $response->assertStatus(401);
         $response->assertJson([
             'status' => 'error',
-            'message' => 'Your email or password is incorrect.',
+            'message' => 'Your email or password is incorrect',
         ]);
         
     }
 
     public function test_user_not_registedered_couldnt_login(): void
     {
-        $response = $this->post('/api/v1/users/login', [
+        $response = $this->post('/api/v1/auth/login', [
             'email' => $this->mockUserData['email'],
             'password' => $this->mockUserData['password'],
         ]);
         $response->assertStatus(401);
         $response->assertJson([
             'status' => 'error',
-            'message' => 'Your email or password is incorrect.',
+            'message' => 'Your email or password is incorrect',
         ]);
         
     }
