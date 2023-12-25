@@ -88,10 +88,12 @@ class CounselingController extends Controller
 
     public function store(Request $request)
     {
-
         // Validate the incoming request data
         $request->validate([
             // Add validation rules for your request data
+            'psychologist_id' => 'required|exists:users,id',
+            'meet_date' => 'required|date',
+            'meet_time' => 'required|date_format:H:i',
         ]);
 
         // Check if the user is authenticated
@@ -121,9 +123,9 @@ class CounselingController extends Controller
             'invoice_id' => $invoice->id,
             'result_id' => $result->id,
             'psikolog_id' => $request->psychologist_id,
-            // 'created_at' => $createdAt,
+            'meet_date' => $request->meet_date,
+            'meet_time' => $request->meet_time,
             'meet_url' => $meetURL,
-            // 'updated_at' => $updatedAt,
         ]);
 
         if (!$counseling) {

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('psikolog_id')->constrained('users');
             $table->foreignId('invoice_id')->constrained('invoices');
             $table->foreignId('result_id')->constrained('results')->nullable();
+            $table->date('meet_date')->nullable();
+            $table->time('meet_time')->nullable();
             $table->string('meet_url')->nullable();
         });
     }

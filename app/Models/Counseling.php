@@ -14,6 +14,8 @@ class Counseling extends Model
         'psikolog_id',
         'created_at',
         'updated_at',
+        'meet_date', 
+        'meet_time', 
         'meet_url', 
     ];
 
