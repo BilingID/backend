@@ -14,9 +14,28 @@ class Counseling extends Model
         'psikolog_id',
         'created_at',
         'updated_at',
-        'meet_url',
-        // Add other fields as needed
+        'meet_url', 
     ];
 
-    // Rest of your model code...
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
+
+    public function result()
+    {
+        return $this->belongsTo(Result::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function psychologist()
+    {
+        return $this->belongsTo(User::class, 'psikolog_id');
+    }
+
+    
 }

@@ -19,7 +19,7 @@ class Result extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        
+        'attachment_path'
     ];
 
     /**

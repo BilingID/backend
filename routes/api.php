@@ -63,10 +63,17 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('konseling')->middleware('auth:sanctum')->group(function () {
-        Route::get('/', [CounselingController::class, 'getMeetInfo']);
+        Route::get('/', [CounselingController::class, 'index']);
+        Route::get('/{id}/info', [CounselingController::class, 'getMeetInfo']);
         Route::post('/', [CounselingController::class, 'store']);
-        Route::get('/{id}', [CounselingController::class, 'getMeetInfo']);
-        Route::put('/{id}/update', [CounselingController::class, 'update']);
+        Route::get('/{id}', [CounselingController::class, 'getPayment']);
+        Route::post('/{id}/update', [CounselingController::class, 'update']);
+        Route::get('/{id}/result', [CounselingController::class, 'getResult']);
+    });
+
+    Route::prefix('konseling')->group(function () {
+        Route::get('/{id}/process', [CounselingController::class, 'processPayment']); // SIMULATE PAYMENT PROCESS
+        Route::get('/{id}/done', [CounselingController::class, 'updateStatus']); // SIMULATE PAYMENT PROCESS
     });
 
     Route::prefix('psikotes')->group(function () {

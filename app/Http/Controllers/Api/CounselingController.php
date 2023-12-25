@@ -19,21 +19,35 @@ class CounselingController extends Controller
      */
     public function index()
     {
-        $counselings = Counseling::with('invoice')
+        $counselings = Counseling::with('psychologist')
             ->with('result')
-            ->where('user_id', Auth::user()->id)
+            ->with('user')
+            ->where(function ($query) {
+                $userId = Auth::user()->id;
+                $query->where('user_id', $userId)
+                    ->orWhere('psikolog_id', $userId);
+            })
+            ->whereHas('invoice', function ($query) {
+                $query->where('status', 'paid');
+            })
+            ->orderByDesc('created_at')
             ->get();
+
+        return $this->success($counselings, 'Counseling data retrieved successfully');
     }
+
 
     public function getMeetInfo(String $id)
     {
         $counseling = Counseling::where('id', $id)->first();
         $meetURL = $counseling->meet_url;
         $psychologist = User::where('id', $counseling->psikolog_id)->first();
+        $user = User::where('id', $counseling->user_id)->first();
 
         return $this->success([
             'meet_url' => $meetURL,
             'psychologist_name' => $psychologist->fullname,
+            'user_name' => $user->fullname,
         ], 'Meet Info successfully retrieved');
     }
 
@@ -100,16 +114,16 @@ class CounselingController extends Controller
         $result = Result::create();
 
         // Create Counseling
-        $createdAt = now(); // Use Laravel's now() function to get the current timestamp
-        $updatedAt = now(); // Use Laravel's now() function to get the current timestamp
+        // $createdAt = now(); // Use Laravel's now() function to get the current timestamp
+        // $updatedAt = now(); // Use Laravel's now() function to get the current timestamp
         $counseling = Counseling::create([
             'user_id' => Auth::user()->id,
             'invoice_id' => $invoice->id,
             'result_id' => $result->id,
             'psikolog_id' => $request->psychologist_id,
-            'created_at' => $createdAt,
+            // 'created_at' => $createdAt,
             'meet_url' => $meetURL,
-            'updated_at' => $updatedAt,
+            // 'updated_at' => $updatedAt,
         ]);
 
         if (!$counseling) {
@@ -132,6 +146,27 @@ class CounselingController extends Controller
         //
     }
 
+    public function updateStatus(String $id)
+    {
+        $counseling = Counseling::with('result')->where('id', $id)->first();
+
+        $counseling->result->status = 'finish';
+
+        if (!$counseling->result->save())
+            return $this->error([], "Update status failed.");
+
+        return $this->success($counseling->result, "Update status successfully");
+    }
+
+    public function getResult($id) {
+        $counseling = Counseling::with('result')->where('id', $id)->first();
+
+        if (!$counseling)
+            return $this->error([], "Counseling not found.");
+
+        return $this->success($counseling->result, "Get result successfully");
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
@@ -142,8 +177,9 @@ class CounselingController extends Controller
 
         $counseling->updated_at = now();
         $result = Result::where('id', $counseling->result_id)->first();
-        if ($request->result_file !== null) {
-            $result->attachment_path = config("app.url") . 'storage/' . $request->result_file->store('pdf/result', 'public');
+        
+        if ($request->file !== null) {
+            $result->attachment_path = config("app.url") . 'storage/' . $request->file->store('pdf', 'public');
             $result->updated_at = now();
             $result->status = 'finish';
         }
