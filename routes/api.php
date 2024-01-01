@@ -80,17 +80,3 @@ Route::prefix('v1')->group(function () {
         Route::get('/{code}/process', [PsychotestController::class, 'processPayment']); // SIMULATE PAYMENT PROCESS
     });
 });
-
-Route::prefix('test')->group(function () {
-    Route::get('/qr/{data}', [QrCodeController::class, 'generate']);
-    Route::get('/sendemail', function () {
-        $data = [
-            'name' => 'Abdullah',
-            'body' => 'Testing Kirim Email di Santri Koding'
-        ];
-
-        Mail::to('crdua2@gmail.com')->send(new SendEmail($data));
-
-        dd("Email Berhasil dikirim.");
-    });
-});

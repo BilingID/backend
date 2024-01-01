@@ -36,7 +36,6 @@ class CounselingController extends Controller
         return $this->success($counselings, 'Counseling data retrieved successfully');
     }
 
-
     public function getMeetInfo(String $id)
     {
         $counseling = Counseling::where('id', $id)->first();
@@ -50,10 +49,6 @@ class CounselingController extends Controller
             'user_name' => $user->fullname,
         ], 'Meet Info successfully retrieved');
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
 
     private function generateUniqueID($length = 3)
     {
@@ -84,7 +79,6 @@ class CounselingController extends Controller
 
         return $randomString;
     }
-
 
     public function store(Request $request)
     {
@@ -139,15 +133,6 @@ class CounselingController extends Controller
         ], 'Counseling created successfully');
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(String $id)
-    {
-        //
-    }
-
     public function updateStatus(String $id)
     {
         $counseling = Counseling::with('result')->where('id', $id)->first();
@@ -169,10 +154,7 @@ class CounselingController extends Controller
         return $this->success($counseling->result, "Get result successfully");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-
+ 
     public function update(Request $request)
     {
         $counseling = Counseling::where('id', $request->id)->first();
@@ -225,9 +207,7 @@ class CounselingController extends Controller
 
         $result->status = 'wait';
         $result->save();
-
-        // event(new PaymentTest($id));
-
+        
         return $this->success([], 'Counseling payment successfully processed');
     }
 
