@@ -67,15 +67,19 @@ class AuthController extends Controller
 
     public function login(AuthRequest $request)
     {
-        if (Auth::attempt($request->all())) {
-            $user = Auth::user();
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user)
+            return $this->error([], "Your email is not registered", ResponseCode::HTTP_UNAUTHORIZED);
+
+        if (Hash::check($request->password, $user->password)) {
             $user->tokens()->delete();
             $token = $user->createToken('auth_token')->plainTextToken;
             
             return $this->success(['token' => $token], "User login successfully");
         }
 
-        return $this->error([], "Your email or password is incorrect", ResponseCode::HTTP_UNAUTHORIZED);
+        return $this->error([], "Your password is incorrect", ResponseCode::HTTP_UNAUTHORIZED);
     }
 
     public function loginWithGoogle(GoogleAuthRequest $request)
